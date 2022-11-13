@@ -61,7 +61,13 @@ public final class ProductDAO implements DAO<Product> {
 
     @Override
     public void delete(@NotNull Product entity) {
-
+        try(var preparedStatement = connection.prepareStatement("DELETE FROM products WHERE id = ?")) {
+            preparedStatement.setInt(1, entity.getId());
+            if (preparedStatement.executeUpdate() == 0)
+                throw new IllegalStateException("Record with name " + entity.getName() + "not found");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
