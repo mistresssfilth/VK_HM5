@@ -1,19 +1,28 @@
 package dao;
 
+import commons.JDBCCredentials;
 import entity.Invoice;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings({"NotNullNullableValidation", "SqlNoDataSourceInspection", "SqlResolve"})
 public final class InvoiceDAO implements DAO<Invoice> {
-    private final @NotNull Connection connection;
 
-    public InvoiceDAO(@NotNull Connection connection) {
-        this.connection = connection;
+    private static final @NotNull JDBCCredentials CREDS = JDBCCredentials.DEFAULT;
+    private static  Connection connection;
+
+    public InvoiceDAO() {
+        try {
+            connection = DriverManager.getConnection(CREDS.getUrl(), CREDS.getLogin(), CREDS.getPassword());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -35,14 +44,14 @@ public final class InvoiceDAO implements DAO<Invoice> {
     @Override
     public Invoice getById(@NotNull int id) {
         try (var statement = connection.createStatement()){
-            try(var resultSet = statement.executeQuery("SELECT * FROM invoice WHERE id = " + id)){
+            try(var resultSet = statement.executeQuery("SELECT * FROM invoices WHERE id = " + id)){
                 if (resultSet.next())
                     return new Invoice(resultSet.getInt("id"), resultSet.getDate("date"), resultSet.getInt("org_id"));
             }
         }catch (SQLException e){
             e.printStackTrace();
         }
-        throw new IllegalStateException("Record with id " + id + "not found");
+        return null;
     }
 
     @Override
@@ -61,8 +70,7 @@ public final class InvoiceDAO implements DAO<Invoice> {
     public void delete(@NotNull Invoice entity) {
         try(var preparedStatement = connection.prepareStatement("DELETE FROM invoices WHERE id = ?")) {
             preparedStatement.setInt(1, entity.getId());
-            if (preparedStatement.executeUpdate() == 0)
-                throw new IllegalStateException("Record not found");
+            preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }

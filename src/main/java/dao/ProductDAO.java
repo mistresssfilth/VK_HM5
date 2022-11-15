@@ -1,19 +1,27 @@
 package dao;
 
+import commons.JDBCCredentials;
 import entity.Product;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings({"NotNullNullableValidation", "SqlNoDataSourceIncpection", "SqlResolve"})
 public final class ProductDAO implements DAO<Product> {
-    private final @NotNull Connection connection;
 
-    public ProductDAO(@NotNull Connection connection) {
-        this.connection = connection;
+    private static final @NotNull JDBCCredentials CREDS = JDBCCredentials.DEFAULT;
+    private static  Connection connection;
+
+    public ProductDAO() {
+        try {
+            connection = DriverManager.getConnection(CREDS.getUrl(), CREDS.getLogin(), CREDS.getPassword());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -22,7 +30,7 @@ public final class ProductDAO implements DAO<Product> {
         try(var statement = connection.createStatement()){
             try(var resultSet = statement.executeQuery("SELECT * FROM products")){
                 while(resultSet.next()){
-                    result.add(new Product(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("code")));
+                    result.add(new Product(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getInt("code")));
                 }
                 return result;
             }
@@ -38,12 +46,12 @@ public final class ProductDAO implements DAO<Product> {
         try (var statement = connection.createStatement()){
             try(var resultSet = statement.executeQuery("SELECT * FROM products WHERE id = " + id)){
                 if (resultSet.next())
-                    return new Product(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("code"));
+                    return new Product(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getInt("code"));
             }
         }catch (SQLException e){
             e.printStackTrace();
         }
-        throw new IllegalStateException("Record with id " + id + "not found");
+        return null;
     }
 
     @Override
@@ -51,7 +59,7 @@ public final class ProductDAO implements DAO<Product> {
         try(var preparedStatement = connection.prepareStatement("INSERT INTO products(id, name, code) VALUES (?, ?, ?)")) {
             preparedStatement.setInt(1, entity.getId());
             preparedStatement.setString(2,entity.getName());
-            preparedStatement.setString(3, entity.getCode());
+            preparedStatement.setInt(3, entity.getCode());
             preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

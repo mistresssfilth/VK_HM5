@@ -1,20 +1,29 @@
 package dao;
 
+import commons.JDBCCredentials;
 import entity.Invoice;
 import entity.Organization;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class OrganizationDAO implements DAO<Organization> {
-    private final @NotNull Connection connection;
+    private static final @NotNull JDBCCredentials CREDS = JDBCCredentials.DEFAULT;
+    private static Connection connection;
 
-    public OrganizationDAO(@NotNull Connection connection) {
-        this.connection = connection;
+    public OrganizationDAO() {
+        try {
+            connection = DriverManager.getConnection(CREDS.getUrl(), CREDS.getLogin(), CREDS.getPassword());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     @Override
@@ -43,7 +52,7 @@ public final class OrganizationDAO implements DAO<Organization> {
         }catch (SQLException e){
             e.printStackTrace();
         }
-        throw new IllegalStateException("Record with id " + id + "not found");
+        return null;
     }
 
     @Override

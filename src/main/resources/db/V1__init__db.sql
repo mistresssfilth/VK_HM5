@@ -14,7 +14,7 @@ CREATE TABLE invoices(
 CREATE TABLE products(
     id SERIAL,
     name VARCHAR NOT NULL,
-    code VARCHAR NOT NULL,
+    code int NOT NULL,
     CONSTRAINT products_pk PRIMARY KEY (id)
 );
 CREATE TABLE positions(

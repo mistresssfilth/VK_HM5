@@ -3,6 +3,7 @@ import entity.Product;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,5 +64,81 @@ public class Manager {
             e.printStackTrace();
         }
         return organizations;
+    }
+
+    public List<Product> getAveragePrice(Date begin, Date end){
+        List<Product> products = new ArrayList<>();
+        try (var preparedStatement = connection.prepareStatement(
+                "SELECT name, AVG(price) as avg_price FROM products " +
+                "INNER JOIN positions ON products.id = product_id " +
+                "INNER JOIN invoices ON positions.id = invoice_id " +
+                "GROUP BY name HAVING invoices.date BETWEEN ? AND ?"))
+        {
+            preparedStatement.setDate(1, begin);
+            preparedStatement.setDate(2, end);
+            try(var resultSet = preparedStatement.getResultSet()){
+                while(resultSet.next()){
+                    products.add(new Product(
+                            resultSet.getInt("id"),
+                            resultSet.getString("name"),
+                            resultSet.getInt("code")));
+                }
+                return products;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
+
+    public List<Product> getProductsForPeriod(Date begin, Date end){
+        List<Product> products = new ArrayList<>();
+        try (var preparedStatement = connection.prepareStatement(
+                "SELECT products.name, organizations.name FROM organizations" +
+                        "LEFT JOIN invoices ON invoices.org_id = organizations.id AND invoices.date BETWEEN ? AND ?" +
+                        "LEFT JOIN positions ON positions.id = invoice_id" +
+                        "LEFT JOIN products ON positions.product_id = products.id" +
+                        "GROUP BY organizations.name, products.name ORDER BY products.name "))
+        {
+            preparedStatement.setDate(1, begin);
+            preparedStatement.setDate(2, end);
+            try(var resultSet = preparedStatement.getResultSet()){
+                while(resultSet.next()){
+                    products.add(new Product(
+                            resultSet.getInt("id"),
+                            resultSet.getString("name"),
+                            resultSet.getInt("code")));
+                }
+                return products;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
+
+    public List<Product> getCountAndPrice(Date begin, Date end){
+        List<Product> products = new ArrayList<>();
+        try (var preparedStatement = connection.prepareStatement(
+                ""))
+        {
+            preparedStatement.setDate(1, begin);
+            preparedStatement.setDate(2, end);
+            try(var resultSet = preparedStatement.getResultSet()){
+                while(resultSet.next()){
+                    products.add(new Product(
+                            resultSet.getInt("id"),
+                            resultSet.getString("name"),
+                            resultSet.getInt("code")));
+                }
+                return products;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return products;
     }
 }

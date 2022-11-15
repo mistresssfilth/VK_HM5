@@ -9,6 +9,6 @@ import org.jetbrains.annotations.NotNull;
 public final class Product {
     private final int id;
     private final @NotNull String name;
-    private final @NotNull String code;
+    private final @NotNull int code;
 
 }

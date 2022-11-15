@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Date;
+import java.sql.Date;
+
 
 @Data
 @AllArgsConstructor
