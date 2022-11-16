@@ -102,7 +102,7 @@ public class ReportManager {
     public Map<Organization, List<Product>> getProductsForPeriod(Date begin, Date end){
         Map<Organization, List<Product>> products = new HashMap<>();
         try (var preparedStatement = connection.prepareStatement(
-                "SELECT products.name, organizations.name FROM organizations" +
+                "SELECT products.name as product_name, organizations.name as org_name FROM organizations" +
                         "LEFT JOIN positions ON positions.id = invoice_id" +
                         "LEFT JOIN products ON positions.product_id = products.id" +
                         "LEFT JOIN invoices ON invoices.org_id = organizations.id AND invoices.date BETWEEN ? AND ?" +
@@ -114,7 +114,7 @@ public class ReportManager {
                 while(resultSet.next()){
                     Organization organization = new Organization(
                             resultSet.getInt("id"),
-                            resultSet.getString("name"),
+                            resultSet.getString("org_name"),
                             resultSet.getInt("inn"),
                             resultSet.getInt("checking_account"));
                     if (!products.containsKey(organization)){
@@ -124,7 +124,7 @@ public class ReportManager {
                     if (resultSet.getString("name") != null){
                         product = new Product(
                                 resultSet.getInt("id"),
-                                resultSet.getString("name"),
+                                resultSet.getString("product_name"),
                                 resultSet.getInt("code"));
                     }
                     products.get(organization).add(product);
