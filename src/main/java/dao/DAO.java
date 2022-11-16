@@ -10,5 +10,6 @@ public interface DAO<T> {
     T getById(@NotNull int id);
     void save(@NotNull T entity);
     void delete (@NotNull T entity);
+    void update(@NotNull T entity);
 
 }

@@ -1,4 +1,5 @@
 import commons.FlywayInit;
+import commons.JDBCCredentials;
 import org.jetbrains.annotations.NotNull;
 
 

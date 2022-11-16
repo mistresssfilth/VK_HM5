@@ -43,6 +43,15 @@ public class InvoiceDAOTest {
         assertEquals(invoiceList, invoiceDAO.getAll());
     }
     @Test
+    void update() {
+        Invoice invoice =  new Invoice(6, Date.valueOf("2022-05-03"), 1);
+        invoiceDAO.save(invoice);
+        invoice.setDate(Date.valueOf("2021-05-03"));
+        invoiceDAO.update(invoice);
+        assertEquals(invoice, invoiceDAO.getById(invoice.getId()));
+        invoiceDAO.delete(invoice);
+    }
+    @Test
     void delete() {
         Invoice invoice =  new Invoice(6, Date.valueOf("2022-05-03"), 1);
         invoiceDAO.save(invoice);

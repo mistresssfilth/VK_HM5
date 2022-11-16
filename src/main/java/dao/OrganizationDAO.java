@@ -3,6 +3,7 @@ package dao;
 import commons.JDBCCredentials;
 import entity.Invoice;
 import entity.Organization;
+import entity.Product;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
@@ -68,6 +69,16 @@ public final class OrganizationDAO implements DAO<Organization> {
         }
     }
 
+    @Override
+    public void update(@NotNull Organization entity) {
+        try(var preparedStatement = connection.prepareStatement("UPDATE organizations SET name = ? WHERE id = ?")) {
+            preparedStatement.setString(1, entity.getName());
+            preparedStatement.setInt(2, entity.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public void delete(@NotNull Organization entity) {
         try(var preparedStatement = connection.prepareStatement("DELETE FROM organizations WHERE id = ?")) {

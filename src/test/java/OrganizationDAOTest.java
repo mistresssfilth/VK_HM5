@@ -41,6 +41,15 @@ public class OrganizationDAOTest {
         assertEquals(organizationList, organizationDAO.getAll());
     }
     @Test
+    void update() {
+        Organization organization =  new Organization(6, "Provider 1", 1287, 258193);
+        organizationDAO.save(organization);
+        organization.setName("Provider 29");
+        organizationDAO.update(organization);
+        assertEquals(organization, organizationDAO.getById(organization.getId()));
+        organizationDAO.delete(organization);
+    }
+    @Test
     void delete() {
         Organization organization =  new Organization(6, "Provider 1", 1287, 258193);
         organizationDAO.save(organization);

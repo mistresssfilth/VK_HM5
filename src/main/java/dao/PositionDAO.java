@@ -74,6 +74,17 @@ public final class PositionDAO implements DAO<Position> {
             e.printStackTrace();
         }
     }
+    @Override
+    public void update(@NotNull Position entity) {
+        try(var preparedStatement = connection.prepareStatement("UPDATE positions SET price = ?, count = ? WHERE id = ?")) {
+            preparedStatement.setInt(1, entity.getPrice());
+            preparedStatement.setInt(2, entity.getCount());
+            preparedStatement.setInt(3, entity.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void delete(@NotNull Position entity) {

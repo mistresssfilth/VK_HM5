@@ -66,6 +66,17 @@ public final class ProductDAO implements DAO<Product> {
         }
 
     }
+    @Override
+    public void update(@NotNull Product entity) {
+        try(var preparedStatement = connection.prepareStatement("UPDATE products SET name = ?, code = ? WHERE id = ?")) {
+            preparedStatement.setString(1, entity.getName());
+            preparedStatement.setInt(2, entity.getCode());
+            preparedStatement.setInt(3, entity.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void delete(@NotNull Product entity) {

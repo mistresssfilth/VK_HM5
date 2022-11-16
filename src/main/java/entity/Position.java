@@ -7,9 +7,9 @@ import org.jetbrains.annotations.NotNull;
 @Data
 @AllArgsConstructor
 public class Position {
-    private final @NotNull int id;
-    private final @NotNull int price;
-    private final @NotNull int productId;
-    private final @NotNull int count;
-    private final @NotNull int invoiceId;
+    private @NotNull int id;
+    private @NotNull int price;
+    private @NotNull int productId;
+    private @NotNull int count;
+    private @NotNull int invoiceId;
 }

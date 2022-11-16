@@ -42,6 +42,17 @@ public class PositionDAOTest {
         assertEquals(positionList, positionDAO.getAll());
     }
     @Test
+    void update() {
+        Position position = new Position(6, 1100, 1, 1, 1);
+        positionDAO.save(position);
+        position.setPrice(1500);
+        position.setCount(2);
+        positionDAO.update(position);
+        assertEquals(position, positionDAO.getById(position.getId()));
+        positionDAO.delete(position);
+
+    }
+    @Test
     void delete() {
         Position position = new Position(6, 1100, 1, 1, 1);
         positionDAO.save(position);

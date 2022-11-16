@@ -65,6 +65,16 @@ public final class InvoiceDAO implements DAO<Invoice> {
             e.printStackTrace();
         }
     }
+    @Override
+    public void update(@NotNull Invoice entity) {
+        try(var preparedStatement = connection.prepareStatement("UPDATE invoices SET date = ? WHERE id = ?")) {
+            preparedStatement.setDate(1, entity.getDate());
+            preparedStatement.setInt(2, entity.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void delete(@NotNull Invoice entity) {

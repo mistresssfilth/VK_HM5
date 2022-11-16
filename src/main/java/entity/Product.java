@@ -7,8 +7,8 @@ import org.jetbrains.annotations.NotNull;
 @Data
 @AllArgsConstructor
 public final class Product {
-    private final int id;
-    private final @NotNull String name;
-    private final @NotNull int code;
+    private int id;
+    private @NotNull String name;
+    private @NotNull int code;
 
 }

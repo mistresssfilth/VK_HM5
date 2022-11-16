@@ -10,7 +10,7 @@ import java.sql.Date;
 @Data
 @AllArgsConstructor
 public final class Invoice {
-    private final @NotNull int id;
-    private final @NotNull Date date;
-    private final @NotNull int orgId;
+    private  @NotNull int id;
+    private  @NotNull Date date;
+    private  @NotNull int orgId;
 }

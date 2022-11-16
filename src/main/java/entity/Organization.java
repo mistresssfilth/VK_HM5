@@ -7,8 +7,8 @@ import org.jetbrains.annotations.NotNull;
 @Data
 @AllArgsConstructor
 public final class Organization {
-    private final @NotNull int id;
-    private final @NotNull String name;
-    private final @NotNull int inn;
-    private final @NotNull int checkingAccount;
+    private @NotNull int id;
+    private @NotNull String name;
+    private @NotNull int inn;
+    private @NotNull int checkingAccount;
 }

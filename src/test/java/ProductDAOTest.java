@@ -1,12 +1,9 @@
-import dao.InvoiceDAO;
 import dao.ProductDAO;
-import entity.Product;
 import entity.Product;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +39,16 @@ public class ProductDAOTest {
         productList.add(new Product(5, "Item 5", 242));
 
         assertEquals(productList, productDAO.getAll());
+    }
+    @Test
+    void update() {
+        Product product = new Product(6, "Item 1", 101);
+        productDAO.save(product);
+        product.setName("Item 21");
+        productDAO.update(product);
+        assertEquals(product, productDAO.getById(product.getId()));
+        productDAO.delete(product);
+
     }
     @Test
     void delete() {
