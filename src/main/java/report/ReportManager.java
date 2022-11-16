@@ -53,17 +53,17 @@ public class ReportManager {
 
     public List<Organization> getProvidersWithCountProductsByValue(int value){
         List<Organization> organizations = new ArrayList<>();
-        try (var statement = connection.createStatement()){
-            try(var resultSet = statement.executeQuery(
-                    "SELECT name, SUM(count) as count FROM organizations\n" +
-                            "INNER JOIN invoices ON organizations.id = invoices.org_id" +
-                            "INNER JOIN positions ON positions.invoice_id = invoices.id" +
-                            "GROUP BY name HAVING SUM(count) = " + value))
+        try (var statement = connection.prepareStatement("SELECT organizations.id as org_id, organizations.name as org_name, inn, checking_account FROM organizations" +
+                "INNER JOIN invoices ON organizations.id = invoices.org_id" +
+                "INNER JOIN positions ON positions.invoice_id = invoices.id" +
+                "WHERE count > ?")){
+            statement.setInt(1, value);
+            try(var resultSet = statement.executeQuery())
             {
                 while (resultSet.next()) {
                     organizations.add(new Organization(
-                            resultSet.getInt("id"),
-                            resultSet.getString("name"),
+                            resultSet.getInt("org_id"),
+                            resultSet.getString("org_name"),
                             resultSet.getInt("inn"),
                             resultSet.getInt("checking_account")));
                 }
@@ -77,10 +77,9 @@ public class ReportManager {
 
     public Integer getAveragePrice(Date begin, Date end){
         try (var preparedStatement = connection.prepareStatement(
-                "SELECT name, AVG(price) as avg_price FROM products " +
-                "INNER JOIN positions ON products.id = product_id " +
-                "INNER JOIN invoices ON positions.id = invoice_id " +
-                "GROUP BY name HAVING invoices.date BETWEEN ? AND ?"))
+                "SELECT AVG(price) as avg_price FROM positions " +
+                "INNER JOIN invoices ON invoices.id = positions.invoice_id " +
+                "WHERE invoices.date BETWEEN ? AND ?"))
         {
             preparedStatement.setDate(1, begin);
             preparedStatement.setDate(2, end);
@@ -110,7 +109,7 @@ public class ReportManager {
         {
             preparedStatement.setDate(1, begin);
             preparedStatement.setDate(2, end);
-            try(var resultSet = preparedStatement.getResultSet()){
+            try(var resultSet = preparedStatement.executeQuery()){
                 while(resultSet.next()){
                     Organization organization = new Organization(
                             resultSet.getInt("id"),
