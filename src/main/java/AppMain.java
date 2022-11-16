@@ -42,6 +42,14 @@ public class AppMain {
 
        System.out.println("Report #5");
         Map<Organization, List<Product>> map = reportManager.getProductsForPeriod(begin, end);
-        System.out.println(map);
+        for (Map.Entry<Organization, List<Product>> entry : map.entrySet()){
+            System.out.println(entry.getKey().getName() + "\t\t" + entry.getKey().getInn() + "\t\t" + entry.getKey().getCheckingAccount());
+            if (entry.getValue().size() == 0)
+                System.out.println("0");
+            else {
+                for (Product product : entry.getValue())
+                    System.out.println(product.getName() + "\t\t" + product.getCode());
+            }
+        }
     }
 }

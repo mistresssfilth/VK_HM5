@@ -101,18 +101,15 @@ public class ReportManager {
     public Map<Organization, List<Product>> getProductsForPeriod(Date begin, Date end){
         Map<Organization, List<Product>> products = new HashMap<>();
         try (var preparedStatement = connection.prepareStatement(
-                "SELECT products.name as product_name, organizations.name as org_name FROM organizations" +
-                        "LEFT JOIN positions ON positions.id = invoice_id" +
-                        "LEFT JOIN products ON positions.product_id = products.id" +
-                        "LEFT JOIN invoices ON invoices.org_id = organizations.id AND invoices.date BETWEEN ? AND ?" +
-                        "GROUP BY organizations.name, products.name ORDER BY products.name "))
+                "SELECT products.id as pr_id, products.name as product_name, products.code as code, " +
+                        "organizations.id as org_id, organizations.name as org_name, organizations.inn as inn, organizations.checking_account as checking_account FROM organizations LEFT JOIN positions ON positions.id = invoice_id LEFT JOIN products ON positions.product_id = products.id LEFT JOIN invoices ON invoices.org_id = organizations.id AND invoices.date BETWEEN ? AND ?"))
         {
             preparedStatement.setDate(1, begin);
             preparedStatement.setDate(2, end);
             try(var resultSet = preparedStatement.executeQuery()){
                 while(resultSet.next()){
                     Organization organization = new Organization(
-                            resultSet.getInt("id"),
+                            resultSet.getInt("org_id"),
                             resultSet.getString("org_name"),
                             resultSet.getInt("inn"),
                             resultSet.getInt("checking_account"));
@@ -120,9 +117,9 @@ public class ReportManager {
                         products.put(organization, new ArrayList<>());
                     }
                     Product product = null;
-                    if (resultSet.getString("name") != null){
+                    if (resultSet.getString("product_name") != null){
                         product = new Product(
-                                resultSet.getInt("id"),
+                                resultSet.getInt("pr_id"),
                                 resultSet.getString("product_name"),
                                 resultSet.getInt("code"));
                     }
