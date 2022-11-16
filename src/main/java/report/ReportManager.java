@@ -1,3 +1,5 @@
+package report;
+
 import commons.JDBCCredentials;
 import entity.Organization;
 import entity.Product;
@@ -12,11 +14,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Manager {
+public class ReportManager {
     private static final @NotNull JDBCCredentials CREDS = JDBCCredentials.DEFAULT;
     private static Connection connection;
 
-    public Manager() {
+    public ReportManager() {
         try {
             connection = DriverManager.getConnection(CREDS.getUrl(), CREDS.getLogin(), CREDS.getPassword());
         } catch (SQLException e) {
