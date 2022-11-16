@@ -30,10 +30,10 @@ public class ReportManager {
         List<Organization> organizations = new ArrayList<>();
         try (var statement = connection.createStatement()){
             try(var resultSet = statement.executeQuery(
-                    "SELECT name, SUM(count) as count FROM organizations " +
+                    "SELECT organizations.id, name, inn, checking_account, SUM(count) as count FROM organizations " +
                             "INNER JOIN invoices ON organizations.id = invoices.org_id " +
-                            "INNER JOIN positions ON positions.invoice_id = invoices.id  " +
-                            "GROUP BY name ORDER BY count DESC LIMIT 10"))
+                            "INNER JOIN positions ON positions.invoice_id = invoices.id " +
+                            "GROUP BY organizations.id, name, inn, checking_account ORDER BY count DESC LIMIT 10"))
             {
                 while (resultSet.next()) {
                     organizations.add(new Organization(
