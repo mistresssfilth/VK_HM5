@@ -26,7 +26,7 @@ public class AppMain {
         for (Organization organization : reportManager.getProvidersByCountProducts()){
             System.out.println(organization.getName() + "\t\t" + organization.getInn() + "\t\t" + organization.getCheckingAccount());
         }
-        System.out.println("Report #2");
+        System.out.println("\nReport #2");
         List<Organization> organizationsList = reportManager.getProvidersWithCountProductsByValue(3);
         for(Organization organization : organizationsList){
             if (organization == null){
@@ -36,11 +36,11 @@ public class AppMain {
             System.out.println(organization.getName() + "\t\t" + organization.getInn() + "\t\t" + organization.getCheckingAccount());
         }
 
-        System.out.println("Report #4");
+        System.out.println("\nReport #4");
         Integer averagePrice = reportManager.getAveragePrice(begin, end);
         System.out.println("Average price: " + averagePrice);
 
-       System.out.println("Report #5");
+       System.out.println("\nReport #5");
         Map<Organization, List<Product>> map = reportManager.getProductsForPeriod(begin, end);
         for (Map.Entry<Organization, List<Product>> entry : map.entrySet()){
             System.out.println(entry.getKey().getName() + "\t\t" + entry.getKey().getInn() + "\t\t" + entry.getKey().getCheckingAccount());

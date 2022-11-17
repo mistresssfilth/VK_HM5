@@ -144,39 +144,24 @@ public class ReportManager {
     public Map<Organization, List<Product>> getCountAndPrice(Date begin, Date end){
         Map<Organization, List<Product>> products = new HashMap<>();
         try (var preparedStatement = connection.prepareStatement(
-                "SELECT organization.name as org_name, organization.inn, product.name as product_name, product.code" +
-                        "FROM organizations" +
+                "SELECT products.id as prod_id, products.name as product_name, products.code " +
+                        "FROM products " +
                         "LEFT JOIN invoices ON invoices.org_id = organizations.id AND invoices.date BETWEEN ? AND ?" +
-                        "LEFT JOIN positions ON positions.invoice_id = invoices.id" +
+                        "LEFT JOIN positions ON positions.invoice_id = invoices.id " +
                         "LEFT JOIN products ON products.id = positions.product_id"))
         {
             preparedStatement.setDate(1, begin);
             preparedStatement.setDate(2, end);
             try(var resultSet = preparedStatement.getResultSet()){
                 while(resultSet.next()){
-                    Organization organization = new Organization(
-                            resultSet.getInt("id"),
-                            resultSet.getString("org_name"),
-                            resultSet.getInt("inn"),
-                            resultSet.getInt("checking_account")
-                    );
-                    Product product = null;
-                    if (resultSet.getString("product_name") != null) {
-                        product = new Product(
-                                resultSet.getInt("id"),
+                    Product product = new Product(
+                                resultSet.getInt("prod_id"),
                                 resultSet.getString("product_name"),
                                 resultSet.getInt("code"));
                     }
-                    if (!products.containsKey(organization)){
-                        products.put(organization, new ArrayList<>());
-                    }
-                    if (product != null){
-                        products.get(organization).add(product);
-                    }
                 }
             }
-
-        } catch (SQLException e) {
+        catch (SQLException e) {
             e.printStackTrace();
         }
         return products;
