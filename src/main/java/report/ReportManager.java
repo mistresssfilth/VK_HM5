@@ -144,7 +144,7 @@ public class ReportManager {
     public Map<Organization, List<Product>> getCountAndPrice(Date begin, Date end){
         Map<Organization, List<Product>> products = new HashMap<>();
         try (var preparedStatement = connection.prepareStatement(
-                "SELECT products.id as prod_id, products.name as product_name, products.code " +
+                "SELECT products.id as prod_id, products.name as product_name, products.code, SUM(count), price " +
                         "FROM products " +
                         "LEFT JOIN invoices ON invoices.org_id = organizations.id AND invoices.date BETWEEN ? AND ?" +
                         "LEFT JOIN positions ON positions.invoice_id = invoices.id " +
