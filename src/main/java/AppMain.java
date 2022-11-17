@@ -35,7 +35,7 @@ public class AppMain {
         for (Map.Entry<Organization, List<Product>> entry : map.entrySet()){
             System.out.println(entry.getKey().getName() + "\t\t" + entry.getKey().getInn() + "\t\t" + entry.getKey().getCheckingAccount());
             if (entry.getValue().size() < 1)
-                System.out.println("The organization didn't products in the specified period");
+                System.out.println("The organization didn't produce products in the specified period");
             else {
                 for (Product product : entry.getValue())
                     System.out.println(product.getName() + "\t\t" + product.getCode());
