@@ -49,7 +49,7 @@ public class ReportManagerTest {
         List<Product> productsByProvider2 = Arrays.asList(new Product(2, "Item 2", 112));
         productsByProvider1.add(new Product(5,"Item 5", 242));
         productsByProvider1.add(new Product(4, "Item 4", 353));
-        productsByProvider1.add(new Product(1, "Item 1", 10));
+        productsByProvider1.add(new Product(1, "Item 1", 101));
         map.put(new Organization(1, "Provider 1", 1287, 258193), productsByProvider1);
         map.put(new Organization(2, "Provider 2", 1589, 158538), productsByProvider2);
 
