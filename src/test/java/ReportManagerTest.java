@@ -39,7 +39,8 @@ public class ReportManagerTest {
     }
     @Test
     void getAveragePrice(){
-
+        int avg = 3369;
+        assertEquals(avg, reportManager.getAveragePrice(BEGIN, END, 2));
     }
     @Test
     void getProductsForPeriod(){

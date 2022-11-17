@@ -31,7 +31,7 @@ public class AppMain {
         }
 
         System.out.println("\nReport #4");
-        Integer averagePrice = reportManager.getAveragePrice(begin, end);
+        Integer averagePrice = reportManager.getAveragePrice(begin, end, 2);
         System.out.println("Average price: " + averagePrice);
 
        System.out.println("\nReport #5");

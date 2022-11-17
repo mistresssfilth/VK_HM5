@@ -77,14 +77,15 @@ public class ReportManager {
         return organizations;
     }
 
-    public Integer getAveragePrice(Date begin, Date end){
+    public Integer getAveragePrice(Date begin, Date end, int id){
         try (var preparedStatement = connection.prepareStatement(
                 "SELECT AVG(price) as avg_price FROM positions " +
                 "INNER JOIN invoices ON invoices.id = positions.invoice_id " +
-                "WHERE invoices.date BETWEEN ? AND ?"))
+                "WHERE invoices.date BETWEEN ? AND ? AND product_id = ?"))
         {
             preparedStatement.setDate(1, begin);
             preparedStatement.setDate(2, end);
+            preparedStatement.setInt(3, id);
             try(var resultSet = preparedStatement.executeQuery()){
                 if (resultSet.next()){
                     return resultSet.getInt("avg_price");
