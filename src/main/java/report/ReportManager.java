@@ -53,12 +53,14 @@ public class ReportManager {
 
     public List<Organization> getProvidersWithCountProductsByValue(int value){
         List<Organization> organizations = new ArrayList<>();
-        try (var statement = connection.prepareStatement("SELECT organizations.id as org_id, organizations.name as org_name, inn, checking_account FROM organizations" +
-                "INNER JOIN invoices ON organizations.id = invoices.org_id" +
-                "INNER JOIN positions ON positions.invoice_id = invoices.id" +
+        try (var statement = connection.prepareStatement("SELECT organizations.id as org_id, " +
+                "organizations.name as org_name, inn, checking_account FROM organizations " +
+                "INNER JOIN invoices ON organizations.id = invoices.org_id " +
+                "INNER JOIN positions ON positions.invoice_id = invoices.id " +
                 "WHERE count > ?")){
             statement.setInt(1, value);
-            try(var resultSet = statement.executeQuery())
+            statement.executeQuery();
+            try(var resultSet = statement.getResultSet())
             {
                 while (resultSet.next()) {
                     organizations.add(new Organization(
@@ -102,7 +104,11 @@ public class ReportManager {
         Map<Organization, List<Product>> products = new HashMap<>();
         try (var preparedStatement = connection.prepareStatement(
                 "SELECT products.id as pr_id, products.name as product_name, products.code as code, " +
-                        "organizations.id as org_id, organizations.name as org_name, organizations.inn as inn, organizations.checking_account as checking_account FROM organizations LEFT JOIN positions ON positions.id = invoice_id LEFT JOIN products ON positions.product_id = products.id LEFT JOIN invoices ON invoices.org_id = organizations.id AND invoices.date BETWEEN ? AND ?"))
+                        "organizations.id as org_id, organizations.name as org_name, organizations.inn as inn, " +
+                        "organizations.checking_account as checking_account FROM organizations " +
+                        "LEFT JOIN positions ON positions.id = invoice_id " +
+                        "LEFT JOIN products ON positions.product_id = products.id " +
+                        "LEFT JOIN invoices ON invoices.org_id = organizations.id AND invoices.date BETWEEN ? AND ?"))
         {
             preparedStatement.setDate(1, begin);
             preparedStatement.setDate(2, end);

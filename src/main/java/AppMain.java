@@ -26,15 +26,15 @@ public class AppMain {
         for (Organization organization : reportManager.getProvidersByCountProducts()){
             System.out.println(organization.getName() + "\t\t" + organization.getInn() + "\t\t" + organization.getCheckingAccount());
         }
-//        System.out.println("Report #2");
-//        List<Organization> organizationsList = reportManager.getProvidersWithCountProductsByValue(101);
-//        for(Organization organization : organizationsList){
-//            if (organization == null){
-//                System.out.println("---");
-//                continue;
-//            }
-//            System.out.println(organization.getName() + "\t\t" + organization.getInn() + "\t\t" + organization.getCheckingAccount());
-//        }
+        System.out.println("Report #2");
+        List<Organization> organizationsList = reportManager.getProvidersWithCountProductsByValue(3);
+        for(Organization organization : organizationsList){
+            if (organization == null){
+                System.out.println("---");
+                continue;
+            }
+            System.out.println(organization.getName() + "\t\t" + organization.getInn() + "\t\t" + organization.getCheckingAccount());
+        }
 
         System.out.println("Report #4");
         Integer averagePrice = reportManager.getAveragePrice(begin, end);
