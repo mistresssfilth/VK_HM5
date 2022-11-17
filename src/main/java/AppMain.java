@@ -13,8 +13,6 @@ import java.util.Map;
 
 
 public class AppMain {
-    private static final @NotNull JDBCCredentials CREDS = JDBCCredentials.DEFAULT;
-
     public static void main(@NotNull String @NotNull[] args) {
         FlywayInit.initDb();
 
@@ -44,7 +42,7 @@ public class AppMain {
         Map<Organization, List<Product>> map = reportManager.getProductsForPeriod(begin, end);
         for (Map.Entry<Organization, List<Product>> entry : map.entrySet()){
             System.out.println(entry.getKey().getName() + "\t\t" + entry.getKey().getInn() + "\t\t" + entry.getKey().getCheckingAccount());
-            if (entry.getValue().size() == 0)
+            if (entry.getValue().size() < 1)
                 System.out.println("The organization didn't products in the specified period");
             else {
                 for (Product product : entry.getValue())
