@@ -106,9 +106,10 @@ public class ReportManager {
                 "SELECT products.id as pr_id, products.name as product_name, products.code as code, " +
                         "organizations.id as org_id, organizations.name as org_name, organizations.inn as inn, " +
                         "organizations.checking_account as checking_account FROM organizations " +
-                        "LEFT JOIN positions ON positions.id = invoice_id " +
+                        "LEFT JOIN invoices ON invoices.org_id = organizations.id " +
+                        "LEFT JOIN positions ON positions.invoice_id = invoices.id " +
                         "LEFT JOIN products ON positions.product_id = products.id " +
-                        "LEFT JOIN invoices ON invoices.org_id = organizations.id AND invoices.date BETWEEN ? AND ?"))
+                        "WHERE invoices.date BETWEEN ? AND ?"))
         {
             preparedStatement.setDate(1, begin);
             preparedStatement.setDate(2, end);

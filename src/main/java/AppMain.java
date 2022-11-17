@@ -18,8 +18,8 @@ public class AppMain {
     public static void main(@NotNull String @NotNull[] args) {
         FlywayInit.initDb();
 
-        Date begin = Date.valueOf("2020-05-03");
-        Date end = Date.valueOf("2022-12-12");
+        Date begin = Date.valueOf("2019-03-06");
+        Date end = Date.valueOf("2022-05-03");
 
         ReportManager reportManager =  new ReportManager();
         System.out.println("Report #1");
