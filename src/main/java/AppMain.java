@@ -23,10 +23,6 @@ public class AppMain {
         System.out.println("\nReport #2");
         List<Organization> organizationsList = reportManager.getProvidersWithCountProductsByValue(3);
         for(Organization organization : organizationsList){
-            if (organization == null){
-                System.out.println("---");
-                continue;
-            }
             System.out.println(organization.getName() + "\t\t" + organization.getInn() + "\t\t" + organization.getCheckingAccount());
         }
 
